@@ -1,0 +1,1 @@
+-- 1) How many tracks do we have in our catalog?

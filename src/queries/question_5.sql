@@ -1,0 +1,1 @@
+-- 5) How long do we need to expect to wait until we have received 99% of a given set of stream events at the collector relative to when the events were created?

@@ -1,0 +1,1 @@
+-- 3) Who are the 3 most played artists and how many plays do they have?
