@@ -4,9 +4,10 @@
 As hinted in the description, **stream** table includes multiple events with the
 same event_id:
 
-sqlite> select count(event_id) from stream;
+`sqlite> select count(event_id) from stream;`
 237001
-sqlite> select count(distinct event_id) from stream;
+
+`sqlite> select count(distinct event_id) from stream;`
 215358
 
 -> 21643 repeating events.
@@ -66,6 +67,7 @@ the same situation with id re-use and select unique artist as first
 alphabetically (see the query).
 
 |artist name|number of plays|
+|-----------|---------------|
 |Herr Nicolai Wulf B.Eng.|417|
 |Céline-Jessica Paquin|347|
 |Émilie Dubois|332|
