@@ -114,4 +114,55 @@ as well as query result
 
 Important reminder here is that duplicated events are removed from the
 fact_stream and we have only "fastest event reception".
-With this limitation the answer is: about 14 seconds.
+With this consideration the answer is: about 14 seconds.
+
+> 6. Would you have built any other tables on top of the provided data 
+> to aid your work?
+
+There are two/three types of the insides questions grain provided data contents:
+track (in time), artists (in time), and track-artists.
+With the current structure it is relativaly easy to answer track questions,
+relativaly hard to answer artist and combined questions. Something alike bridge
+table for artist group will be useful.
+
+> 7. artist and track contain PII data; how would you handle this kind of 
+> sensitive data while creating a data model on top of those tables?
+
+Firstly I would avoid joining sensitive columns (names/track_names) in the
+downstream models unless nessessary, for example in case of aggreggate
+statistics. Secondly, one can hash sensitive data. Thirdly, split sensitive
+and non-sensitive (hashed) data into different schemas and provide relevant
+role access.
+
+> 8. stream_new represents new data that we would like to merge with the old 
+> stream data as it comes in; how would you design the fact table (fact_stream) 
+> to scale efficiently?
+
+Probably I am missng on this quesion and overarching idea of fact table, but
+will try. stream data is already facts as is, so we append new data daily with 
+the appropriate data storage and retention considerations. Since we have 
+duplicating events, we may either update the last event (by event_id) with 
+the new loading time or disregard (not insert) duplicated events into 
+stream table. In case of updating, a column "updated_at" will be tracking 
+the update timestamps.
+
+> 9. Your stakeholder wants to know the exact amount of plays per day, 
+> but as you saw the streams can arrive delayed in the database. 
+> How would you handle the delayed data?
+
+Exact number of streams for date X can only fully be available on the day X+1,
+and, as we know from the previous exploration, delay in receiving the first
+event (in possibly duplicated sequence) is short enough to rely on daily
+statistic.
+Other thing to consider in this question is when stakeholder needs to know
+exact statistic and if it is within expected delay window.
+
+> 10. To increase the robustness of our reporting layer we would like to have
+> data quality tests in place. What tests would you propose and how would you 
+> implement them?
+
+Non-null, relationships and uniquness (relevant to the data at hand) tests
+are available as generic on source data and derived data models in dbt
+https://docs.getdbt.com/docs/building-a-dbt-project/tests, as well as custom
+tests which can also be implemented in dbt.
+
